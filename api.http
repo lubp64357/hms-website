@@ -1,0 +1,36 @@
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+{
+    "username":"test",
+    "email":"oluwajuwon@gmail.com",
+    "password":"123456",
+    "verify": "not verified"
+}
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "username":"test",
+    "password":"123456"
+}
+
+###
+POST http://localhost:3000/verify
+Content-Type: application/json
+
+{
+    "id": "19",
+    "token": "ap9bxq1k"
+}
+
+###
+POST http://localhost:3000/reset
+Content-Type: application/json
+
+{
+    "email": "oluwajuwon@gmail.com"
+}
+
