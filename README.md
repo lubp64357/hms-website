@@ -1,2 +1,2 @@
-# hospital-management
+# hospital-management-app
 Hospital management system
