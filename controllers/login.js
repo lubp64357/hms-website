@@ -1,11 +1,16 @@
 var express = require('express')
+var home = require('./home')
+var mysql = require('mysql')
+var session = require('express-session')
 var router = express.Router()
 var bodyParser = require('body-parser')
 var db = require.main.require('./models/db_controller')
-var mysql = require('mysql')
-var session = require('express-session')
 var sweetalert = require('sweetalert2')
 const { check, validationResult } = require('express-validator')
+
+router.get('/', function (req, res) {
+	res.render('login.ejs')
+})
 
 var con = mysql.createConnection({
 	host: 'localhost',
@@ -21,49 +26,50 @@ router.use(
 		saveUninitialized: true,
 	}),
 )
+
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(bodyParser.json())
 
 router.post(
 	'/',
 	[
-		check('username').notEmpty().withMessage('username required'),
-		check('password').notEmpty().withMessage('password required'),
+		check('username').notEmpty().withMessage('Username is reequired'),
+		check('password').notEmpty().withMessage('Password is reequired'),
 	],
-	function (req, res) {
-		const errors = validationResult(req)
+	function (request, response) {
+		const errors = validationResult(request)
 		if (!errors.isEmpty()) {
-			return res.status(422).json({ errors: errors.array })
+			return response.status(422).json({ errors: errors.array() })
 		}
-		var username = req.body.username
-		var password = req.body.password
-		// console.log(username)
+
+		var username = request.body.username
+		var password = request.body.password
 
 		if (username && password) {
 			con.query(
 				'select * from users where username = ? and password = ?',
 				[username, password],
-				function (err, results, fields) {
+				function (error, results, fields) {
 					if (results.length > 0) {
-						req.session.loggedin = true
-						req.session.username = username
-						res.cookie('username', username)
+						request.session.loggedin = true
+						request.session.username = username
+						response.cookie('username', username)
 						var status = results[0].email_status
 						if (status == 'not_verified') {
-							res.send('please verify your email')
+							response.send('please verify your email')
 						} else {
-							sweetalert.fire('logged in')
-							res.redirects('/home')
+							sweetalert.fire('logged In!')
+							response.redirect('/home')
 						}
 					} else {
-						res.send('incorrect username or password')
+						response.send('Incorrect username / password')
 					}
-					res.end()
+					response.end()
 				},
 			)
 		} else {
-			res.send('please enter your username and password')
-			res.end()
+			response.send('please enter user name and password')
+			response.end()
 		}
 	},
 )

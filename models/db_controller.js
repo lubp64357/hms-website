@@ -32,7 +32,7 @@ module.exports.signup = function (username, email, password, status, callback) {
 }
 
 module.exports.getuserid = function (email, callback) {
-	var query = "select *from verify where email = '" + email + "' "
+	var query = "select * from verify where email = '" + email + "' "
 	con.query(query, callback)
 }
 
@@ -50,8 +50,9 @@ module.exports.verify = function (username, email, token, callback) {
 
 module.exports.matchtoken = function (id, token, callback) {
 	var query =
-		"select * from verify where token = '" + token + "' and id = '" + id + "' "
+		"select * from `verify` where token='" + token + "' and id = " + id
 	con.query(query, callback)
+	console.log(query)
 }
 
 module.exports.updateverify = function (email, email_status, callback) {
@@ -344,6 +345,11 @@ module.exports.getallappointment = function (callback) {
 	con.query(query, callback)
 }
 
+module.exports.getalldept = function (callback) {
+	var query = 'select * from departments'
+	con.query(query, callback)
+}
+
 module.exports.add_appointment = function (
 	p_name,
 	department,
@@ -523,7 +529,7 @@ module.exports.postcomplain = function (
 	con.query(query, callback)
 }
 
-module.exports.getcomplain = function (callbacl) {
+module.exports.getcomplain = function (callback) {
 	var query = 'SELECT * from complain'
 	con.query(query, callback)
 }
