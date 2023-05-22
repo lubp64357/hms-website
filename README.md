@@ -2,6 +2,8 @@
 
 Technologies used: MySQL database with Node.js, Express and EJS
 
+ColorLib template Medico(frontend adjusted with ejs) 
+
 SQL Script: nodelogin.sql  
 
 Sending mail with nodemailer and smtp. Auth paramters in .env
